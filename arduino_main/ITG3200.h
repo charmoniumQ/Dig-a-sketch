@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Wire.h>
+#include "I2CDevice.h"
 
 //#define ITG3200_DEBUG
 
@@ -12,8 +13,10 @@
  */
 class ITG3200 {
 public:
+
   /*
    * No-arg constructor
+   * Must re-initialize with an assignment/copy constructor before use
    */
   ITG3200();
   
@@ -34,6 +37,7 @@ public:
   
   /*
    * Call after each operation to make sure the state is still good
+   * This will be false if the communication fails in a detectable way
    */
   bool good();
 
@@ -55,35 +59,25 @@ public:
   void get_data(int16_t (&data)[4]);
 
 protected:
-  typedef uint8_t RegisterAddress;
-  typedef uint8_t DeviceAddress;
+  I2CDevice device;
   
-  void get_register(RegisterAddress reg, uint8_t quantity, uint8_t * buf);
-  void set_register(RegisterAddress reg, uint8_t val);
-  
-  DeviceAddress slave_address;
-  
-  uint8_t error;
-  // if (error == 1) { ITG3200 did not send requested data }
-  
-  static const DeviceAddress DEFAULT_ADDRESS = B01101000;
+  static const byte DEFAULT_ADDRESS = B01101000;
 
   // See section 7 in the datasheet
-  static const RegisterAddress WHO_AM_I = 0;
-  static const RegisterAddress SMPLRT_DIV = 21;
-  static const RegisterAddress DLPF_FS = 22;
-  static const RegisterAddress INT_CFG = 23;
-  static const RegisterAddress INT_STATUS = 26;
-  static const RegisterAddress TEMP_OUT_H = 27;
-  static const RegisterAddress TEMP_OUT_L = 28;
-  static const RegisterAddress GYRO_XOUT_H = 29;
-  static const RegisterAddress GYRO_XOUT_L = 30;
-  static const RegisterAddress GYRO_YOUT_H = 31;
-  static const RegisterAddress GYRO_YOUT_L = 32;
-  static const RegisterAddress GYRO_ZOUT_H = 33;
-  static const RegisterAddress GYRO_ZOUT_L = 34;
-  static const RegisterAddress PWR_MGM = 62;
-
+  static const I2CDevice::RegisterAddress WHO_AM_I    = 0x00;
+  static const I2CDevice::RegisterAddress SMPLRT_DIV  = 0x15;
+  static const I2CDevice::RegisterAddress DLPF_FS     = 0x16;
+  static const I2CDevice::RegisterAddress INT_CFG     = 0x17;
+  static const I2CDevice::RegisterAddress INT_STATUS  = 0x1A;
+  static const I2CDevice::RegisterAddress TEMP_OUT_H  = 0x1B;
+  static const I2CDevice::RegisterAddress TEMP_OUT_L  = 0x1C;
+  static const I2CDevice::RegisterAddress GYRO_XOUT_H = 0x1D;
+  static const I2CDevice::RegisterAddress GYRO_XOUT_L = 0x1E;
+  static const I2CDevice::RegisterAddress GYRO_YOUT_H = 0x1F;
+  static const I2CDevice::RegisterAddress GYRO_YOUT_L = 0x20;
+  static const I2CDevice::RegisterAddress GYRO_ZOUT_H = 0x21;
+  static const I2CDevice::RegisterAddress GYRO_ZOUT_L = 0x22;
+  static const I2CDevice::RegisterAddress PWR_MGM     = 0x3E;
 };
 
 #endif
