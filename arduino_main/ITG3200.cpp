@@ -8,7 +8,7 @@ ITG3200::ITG3200(const ITG3200 &other) {
   device = other.device;
 }
 
-ITG3200::ITG3200(boolean flag, boolean setupI2C, boolean first) {
+ITG3200::ITG3200(bool setupI2C, bool first) {
   // See section 8.1 of datasheet
   if (first) {
     device = I2CDevice(DEFAULT_ADDRESS, setupI2C);

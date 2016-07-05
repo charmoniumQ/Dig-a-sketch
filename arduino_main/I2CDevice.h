@@ -1,7 +1,6 @@
 #ifndef I2CDEVICE_H
 #define I2CDEVICE_H
 
-#include <Arduino.h>
 #include <Wire.h>
 
 /*

@@ -42,7 +42,7 @@ int8_t I2CDevice::get_register_int8(RegisterAddress reg) {
 
   int8_t out;
   Wire.beginTransmission(address); {
-    Wire.requestFrom(address, byte(1));
+    Wire.requestFrom(address, (uint8_t) 1);
     if (Wire.available()) {
       out = Wire.read();
     } else {

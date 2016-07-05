@@ -3,6 +3,10 @@
 
 #include <Arduino.h>
 
-void print_int16(int16_t s);
+/*
+ * Repeat `base` string `reps` times
+ * Equivalent to `base * reps` in python
+ */
+String mulitply(String base, int8_t reps);
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef ITG3200_H
 #define ITG3200_H
 
-#include <Arduino.h>
 #include <Wire.h>
 #include "I2CDevice.h"
 
@@ -26,14 +25,13 @@ public:
   ITG3200(const ITG3200& other);
 
   /*
-   * The flag parameter is to differentiate this from the no-arg constructor. It is not used.
-   * If setupI2C is true (default), then Wire.begin is called. Since this should be called only once
+   * If setupI2C is true, then Wire.begin is called. Since this should be called only once
    * in your sketch, If you call Wire.begin somewhere else, set setupI2C to false.
    * If there are multiple ITG3200 chips on the I2C bus, you can differeniate between them changing
    * pin 9. In software the one with pin 9 low is first=true. Then one with pin 9 high is first=false.
    * See section 6.1.1 of the datasheet.
    */
-  ITG3200(bool flag, bool setupI2C=true, bool first=true);
+  ITG3200(bool setupI2C, bool first=true);
   
   /*
    * Call after each operation to make sure the state is still good
@@ -61,7 +59,7 @@ public:
 protected:
   I2CDevice device;
   
-  static const byte DEFAULT_ADDRESS = B01101000;
+  static const uint8_t DEFAULT_ADDRESS = 0x68;
 
   // See section 7 in the datasheet
   static const I2CDevice::RegisterAddress WHO_AM_I    = 0x00;
