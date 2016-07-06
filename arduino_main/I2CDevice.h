@@ -1,7 +1,9 @@
 #ifndef I2CDEVICE_H
 #define I2CDEVICE_H
 
-#include <Wire.h>
+#include <stdint.h>
+
+// #define I2C_DEBUG
 
 /*
  * OOP-style library for talking to an I2C device (one per object)
@@ -37,21 +39,22 @@ public:
    */
   template <typename T>
   T get_register(RegisterAddress reg) {
-    int8_t val = get_register_int8(reg);
+    uint8_t val = get_register_uint8(reg);
     return reinterpret_cast<T&>(val);
   }
 
   /*
    * Read a single register
+   * TODO: return a reference that is assingable
    */
-  int8_t operator[](RegisterAddress reg);
+  //int8_t operator[](RegisterAddress reg);
 
   /*
    * Read a range of registers into the buffer
    */
   template <typename T>
   void get_registers(RegisterAddress reg, uint8_t quantity, T * out_buf) {
-    get_registers_int8(reg, quantity, reinterpret_cast<int8_t*>(out_buf));
+    get_registers_uint8(reg, quantity, reinterpret_cast<uint8_t*>(out_buf));
   }
 
   /*
@@ -59,8 +62,8 @@ public:
    */
   template <typename T>
   void set_register(RegisterAddress reg, T value) {
-    int8_t value2  = reinterpret_cast<int8_t&>(value);
-    set_register_int8(reg, value2);
+    uint8_t value2  = reinterpret_cast<uint8_t&>(value);
+    set_register_uint8(reg, value2);
   }
 
   /*
@@ -80,9 +83,9 @@ private:
   void clear_error();
   void set_incomplete_data_error();
   
-  void get_registers_int8(RegisterAddress reg, uint8_t quantity, int8_t * buf);
-  int8_t get_register_int8(RegisterAddress reg);
-  void set_register_int8(RegisterAddress reg, int8_t val);
+  void get_registers_uint8(RegisterAddress reg, uint8_t quantity, uint8_t * buf);
+  uint8_t get_register_uint8(RegisterAddress reg);
+  void set_register_uint8(RegisterAddress reg, uint8_t val);
 };
 
 #endif

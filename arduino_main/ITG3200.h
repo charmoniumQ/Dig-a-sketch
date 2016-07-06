@@ -1,10 +1,8 @@
 #ifndef ITG3200_H
 #define ITG3200_H
 
-#include <Wire.h>
+#include <stdint.h>
 #include "I2CDevice.h"
-
-//#define ITG3200_DEBUG
 
 /*
  * Control the gyro ITG3200 over the I2C bus
@@ -54,7 +52,7 @@ public:
   /*
    * data[0] = temperature, data[1] = gyro x, data[2] = gyro y, data[3] = gyro z
    */
-  void get_data(int16_t (&data)[4]);
+  void get_data(double data[4]);
 
 protected:
   I2CDevice device;
@@ -76,6 +74,8 @@ protected:
   static const I2CDevice::RegisterAddress GYRO_ZOUT_H = 0x21;
   static const I2CDevice::RegisterAddress GYRO_ZOUT_L = 0x22;
   static const I2CDevice::RegisterAddress PWR_MGM     = 0x3E;
+
+  static double DEG_PER_LSB = 14.375;
 };
 
 #endif

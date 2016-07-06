@@ -20,7 +20,7 @@ ITG3200::ITG3200(bool setupI2C, bool first) {
 uint16_t ITG3200::set_frequency(ITG3200::Frequency low_pass_freq, uint8_t num_averaging) {
   device.set_register<uint8_t>(PWR_MGM, 0);
   device.set_register<uint8_t>(SMPLRT_DIV, num_averaging - 1);
-  uint8_t DLPF_CFG = (uint8_t) low_pass_freq;
+  uint8_t DLPF_CFG = static_cast<uint8_t>(low_pass_freq);
   uint8_t FS_SEL = 3;
   device.set_register<uint8_t>(DLPF_FS, FS_SEL << 3 | DLPF_CFG); // TODO: Can I precompute this?
   
@@ -34,19 +34,13 @@ uint16_t ITG3200::set_frequency(ITG3200::Frequency low_pass_freq, uint8_t num_av
   return internal_frequency / num_averaging;
 }
 
-void ITG3200::get_data(int16_t (&data)[4]) {
-  uint8_t buff[8];
+void ITG3200::get_data(double data[4]) {
+  int8_t buff[8];
   // I would type-cast data (array of shorts) into an array of bytes,
   // but I can't garuntee endianness
-  device.get_registers<uint8_t>(TEMP_OUT_H, 8, buff);
-  for (uint8_t i = 0; i < 8; ++i) {
-    if (i % 2 == 0) {
-      // set high byte (and clear remaining data)
-      data[i / 2] = buff[i] << 8;
-    } else {
-      // set low byte
-      data[i / 2] |= buff[i];
-    }
+  device.get_registers<int8_t>(TEMP_OUT_H, 8, buff);
+  for (uint8_t i = 0; i < 4; ++i) {
+    data[i] = (buff[2*i] << 8 | buff[2*i + 1]) * DEG_PER_LSB;
   }
 }
 
