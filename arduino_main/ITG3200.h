@@ -75,7 +75,7 @@ protected:
   static const I2CDevice::RegisterAddress GYRO_ZOUT_L = 0x22;
   static const I2CDevice::RegisterAddress PWR_MGM     = 0x3E;
 
-  static double DEG_PER_LSB = 14.375;
+  static double DEG_PER_LSB;
 };
 
 #endif

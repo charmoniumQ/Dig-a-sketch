@@ -47,3 +47,5 @@ void ITG3200::get_data(double data[4]) {
 
 bool ITG3200::good() { return device.good(); }
 
+double ITG3200::DEG_PER_LSB = 14.375;
+
